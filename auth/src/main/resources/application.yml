@@ -1,0 +1,55 @@
+logging:
+  level:
+   root: INFO
+
+server:
+  port: 9004
+  tomcat:
+    max-threads: 1000
+    min-spare-threads: 50
+    max-spare-threads: 75
+
+#服务注册
+eureka:
+  client:
+    service-url:
+      default-zone: http://gccx-registry:8761/eureka/
+    registry-fetch-interval-seconds: 5
+  instance:
+    preferIpAddress: true
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}        # 将Instance ID设置成IP:端口的形式
+    #Eureka服务器在接收到实例的最后一次发出的心跳后，需要等待多久才可以将此实例删除，默认为90秒
+    lease-expiration-duration-in-seconds: 10
+    #eureka客户需要多长时间发送心跳给eureka服务器，表明它仍然活着,默认为30 秒
+    lease-renewal-interval-in-seconds: 5
+
+spring:
+  application:
+    name: auth-service
+  http:
+    encoding:
+      enabled: true
+      charset: utf-8
+      force: true
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://172.16.0.3:3306/gccx_test1?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=Asia/Shanghai
+    username: gccx
+    password: nKzcop0SqLj_7PZ
+  redis:
+    database: 0
+    host: redis-service
+    port: 30014
+
+#mybatis配置
+#mybatis:
+##实体类所在包名
+#  type-aliases-package: com.wx.securitydemo1.domain
+mybatis:
+  mapper-locations: classpath:mapper/*
+  type-aliases-package: com.qlb.shop.auth.model.*
+  #  config-location: classpath:mybatis-config.xml
+
+mapper:
+  mappers: com.qlb.shop.auth.common.SuperMapper
+  identity: MYSQL
